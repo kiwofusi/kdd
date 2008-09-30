@@ -2,10 +2,16 @@
 
 """
 from start import *
+
 で読み込み
 
 
+# クロール
+hateusers = initializeUserList()
+fillTables(hateusers)
 
+# 計算
+cluc_sim()
 
 # テーブル設計
 CREATE TABLE entry(
