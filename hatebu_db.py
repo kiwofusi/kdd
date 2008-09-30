@@ -2,7 +2,7 @@
 
 import MySQLdb
 
-# ƒ†[ƒUƒŠƒXƒg‚ğæ“¾‚·‚é
+# ãƒ¦ãƒ¼ã‚¶ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
 def initializeUserList(count=29):
 	user_list=[]
 	for p1 in get_hot()[1:count]:
@@ -10,9 +10,9 @@ def initializeUserList(count=29):
 			user = p2['user']
 			user_list.append(user)
 	return user_list
+	
 
-
-# ‹L–Aƒ^ƒOAƒ^ƒO•t‚¯‚ğDB‚É’Ç‰Á‚·‚é
+# è¨˜äº‹ã€ã‚¿ã‚°ã€ã‚¿ã‚°ä»˜ã‘ã‚’DBã«è¿½åŠ ã™ã‚‹
 def fillTables(user_list):
 	con = MySQLdb.connect(db="db",
 		host="localhost", user="user", passwd="passwd", charset="utf8")
@@ -26,9 +26,9 @@ def fillTables(user_list):
 			# insert entry
 			sql = "INSERT IGNORE INTO entry(url) VALUES(%s);"
 			r = cur.execute(sql, url)
-			# ‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚é‹L–‚Í–³‹‚·‚é
+			# ã™ã§ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹è¨˜äº‹ã¯ç„¡è¦–ã™ã‚‹
 			if r == 0: break
-			# ‹L–‚ÌID‚ğæ“¾‚·‚é
+			# è¨˜äº‹ã®IDã‚’å–å¾—ã™ã‚‹
 			cur.execute("select id from entry where url=%s;", url)
 			e_id = cur.fetchone()[0]
 			# e_id = cur.rowcount
@@ -37,10 +37,10 @@ def fillTables(user_list):
 				# insert tag
 				sql = "INSERT IGNORE INTO tag(name) VALUES(%s);"
 				cur.execute(sql, tag)
-				# ƒ^ƒO‚ÌID‚ğæ“¾‚·‚é
+				# ã‚¿ã‚°ã®IDã‚’å–å¾—ã™ã‚‹
 				cur.execute("select id from tag where name=%s;", tag)
 				t_id = cur.fetchone()[0]
-				# insert entry_tagsiƒ^ƒO•t‚¯‚·‚éj
+				# insert entry_tagsï¼ˆã‚¿ã‚°ä»˜ã‘ã™ã‚‹ï¼‰
 				cur.execute("INSERT IGNORE INTO entry_tags(e_id, t_id) VALUES(%d, %d);" % (e_id, t_id))
 				
 	con.commit()
@@ -49,21 +49,21 @@ def fillTables(user_list):
 	return
 
 
-# ƒ^ƒO‚Ì‹¤‹N‰ñ”i‚Ó‚½‚Â‚Ìƒ^ƒO‚ª‹L–‚ğ‚¢‚­‚Â‹¤—L‚µ‚Ä‚¢‚é‚©j
+# ã‚¿ã‚°ã®å…±èµ·å›æ•°ï¼ˆãµãŸã¤ã®ã‚¿ã‚°ãŒè¨˜äº‹ã‚’ã„ãã¤å…±æœ‰ã—ã¦ã„ã‚‹ã‹ï¼‰
 def calc_sim():
 	con = MySQLdb.connect(db="db",
 		host="localhost", user="user", passwd="passwd", charset="utf8")
 	cur = con.cursor()
 	cur.execute('SET NAMES utf8')
 
-	# ‹L–‚Ì”‚ğæ“¾‚·‚é
+	# è¨˜äº‹ã®æ•°ã‚’å–å¾—ã™ã‚‹
 	cur.execute("SELECT count(id) from entry;")
 	entry_num = cur.fetchone()[0]
-	# ƒ^ƒO‚Ì”‚ğæ“¾‚·‚é
+	# ã‚¿ã‚°ã®æ•°ã‚’å–å¾—ã™ã‚‹
 	cur.execute("SELECT count(id) from tag;")
 	tag_num = cur.fetchone()[0]
 
-	# ƒ^ƒOx‚Æy‚É‹¤’Ê‚·‚é‹L–‚ğ”‚¦‚é
+	# ã‚¿ã‚°xã¨yã«å…±é€šã™ã‚‹è¨˜äº‹ã‚’æ•°ãˆã‚‹
 	get_sim = '''SELECT count(z.set_entry) FROM
 	  (SELECT x.t_id AS "tag1", y.t_id  AS "tag2", x.e_id  AS "set_entry"
 	    FROM
@@ -71,10 +71,10 @@ def calc_sim():
 	      (SELECT * from entry_tags where t_id=%d) AS y
 	    WHERE x.e_id = y.e_id) AS z;'''
 
-	# ‚·‚×‚Ä‚Ìƒ^ƒO‚Ì‘g‚İ‡‚í‚¹‚ğŒvZ‚·‚é
+	# ã™ã¹ã¦ã®ã‚¿ã‚°ã®çµ„ã¿åˆã‚ã›ã‚’è¨ˆç®—ã™ã‚‹
 	cur.execute("SELECT id FROM tag ORDER BY id;")
 	tag1 = tag2 = cur.fetchall()
-	# “ñŸŒ³‚Ì•\‚ÌOŠp‚ÉØ‚Á‚½”¼•ª‘¤‚ğŒvZ‚·‚éŠ´‚¶ n(n-1)/2
+	# äºŒæ¬¡å…ƒã®è¡¨ã®ä¸‰è§’ã«åˆ‡ã£ãŸåŠåˆ†å´ã‚’è¨ˆç®—ã™ã‚‹æ„Ÿã˜ n(n-1)/2
 	n = 0
 	for t1 in tag1:
 		n = t1[0] + 1
@@ -82,9 +82,9 @@ def calc_sim():
 		for t2 in tag2[n:]:
 			cur.execute(get_sim % (t1[0], t2[0]))
 			sim = cur.fetchone()[0]
-			cur.execute("INSERT IGNORE INTO tags_sim(sim, t_id1, t_id2) \
+			cur.execute("INSERT IGNORE INTO tags_sim(sim, t_id1, t_id2) Â¥
 					VALUES(%d, %d, %d);" % (sim, t1[0], t2[0]))
-			# ’l‚ğXV‚·‚é‚æ‚¤‚ÉC³
+			# å€¤ã‚’æ›´æ–°ã™ã‚‹ã‚ˆã†ã«ä¿®æ­£
 
 	con.commit()
 	cur.close()
