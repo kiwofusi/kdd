@@ -2,16 +2,16 @@
 
 import MySQLdb
 	
-# ƒ^ƒO‚ðŒŸõ‚·‚é
-# •¶ŽšƒR[ƒh‚ª‚â‚â‚±‚µ‚¢B‚Ó‚Â‚¤‚Ì•¶Žš—ñ‚ð“Ç‚Ýž‚ñ‚Åƒ†ƒjƒR[ƒh‚É•ÏŠ·‚·‚éB
+# ã‚¿ã‚°ã‚’æ¤œç´¢ã™ã‚‹
+# æ–‡å­—ã‚³ãƒ¼ãƒ‰ãŒã‚„ã‚„ã“ã—ã„ã€‚ãµã¤ã†ã®æ–‡å­—åˆ—ã‚’èª­ã¿è¾¼ã‚“ã§ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ã«å¤‰æ›ã™ã‚‹ã€‚
 def search_tags(word):
 	con = MySQLdb.connect(db="db",
 		host="localhost", user="user", passwd="passwd", charset="utf8")
 	cur = con.cursor()
 	cur.execute('SET NAMES utf8')
 
-	# ’†ŠÔˆê’v
-	# ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg—p‚ÉH•¶ŽšƒR[ƒh•ÏŠ·
+	# ä¸­é–“ä¸€è‡´
+	# ã‚³ãƒžãƒ³ãƒ‰ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆç”¨ã«ï¼Ÿæ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›
 	word = unicode("%" + word + "%", "cp932")
 	sql = 'select id,name from tag where name LIKE %s;'
 	cur.execute(sql, word);
@@ -29,23 +29,23 @@ def search_tags(word):
 	# return result
 
 
-# ‚ ‚éƒ^ƒO‚É‹ß‚¢ƒ^ƒO‚ð•\Ž¦‚·‚éi–¼‘O“ü—Íj
+# ã‚ã‚‹ã‚¿ã‚°ã«è¿‘ã„ã‚¿ã‚°ã‚’è¡¨ç¤ºã™ã‚‹ï¼ˆåå‰å…¥åŠ›ï¼‰
 def sim_tags(name):
-	# name‚©‚çID‚ð“Á’è‚·‚é
+	# nameã‹ã‚‰IDã‚’ç‰¹å®šã™ã‚‹
 	con = MySQLdb.connect(db="db",
 		host="localhost", user="user", passwd="passwd", charset="utf8")
 	cur = con.cursor()
 	cur.execute('SET NAMES utf8')
 
-	# Š®‘Sˆê’v
-	# ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg—p‚ÉH•¶ŽšƒR[ƒh•ÏŠ·
+	# å®Œå…¨ä¸€è‡´
+	# ã‚³ãƒžãƒ³ãƒ‰ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆç”¨ã«ï¼Ÿæ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›
 	name = unicode(name, "cp932")
 	sql = 'select id,name from tag where name LIKE %s;'
 	cur.execute(sql, name);
 	result = cur.fetchone()
 	if result == 0: return
 	
-	# sim_tags_by_id(t_id)‚É“n‚µ‚Ä•\Ž¦‚·‚é
+	# sim_tags_by_id(t_id)ã«æ¸¡ã—ã¦è¡¨ç¤ºã™ã‚‹
 	sim_tags_by_id(result[0])
 	
 	con.commit()
@@ -54,18 +54,18 @@ def sim_tags(name):
 	# return result
 
 
-# ‚ ‚éƒ^ƒO‚É‹ß‚¢ƒ^ƒO‚ð•\Ž¦‚·‚éiID“ü—Íj
+# ã‚ã‚‹ã‚¿ã‚°ã«è¿‘ã„ã‚¿ã‚°ã‚’è¡¨ç¤ºã™ã‚‹ï¼ˆIDå…¥åŠ›ï¼‰
 def sim_tags_by_id(t_id):
 	con = MySQLdb.connect(db="db",
 		host="localhost", user="user", passwd="passwd", charset="utf8")
 	cur = con.cursor()
 	cur.execute('SET NAMES utf8')
 
-	# ƒŠƒNƒGƒXƒg‚ðƒ`ƒFƒbƒN‚·‚é
+	# ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 	sql = "select name from tag where id=%d"
 	cur.execute(sql % t_id)
 	result = cur.fetchone()
-	# ƒ^ƒO‚ª‘¶Ý‚µ‚È‚¢ê‡‚ÍI—¹
+	# ã‚¿ã‚°ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯çµ‚äº†
 	if result == 0: return
 	print "id:%d | %s" % (t_id, result[0])
 	print "----------------------------------------"
@@ -88,20 +88,20 @@ def sim_tags_by_id(t_id):
 	# return result
 
 
-# ‹¤‹N“xƒ‰ƒ“ƒLƒ“ƒO‚ð•\Ž¦‚·‚é
+# å…±èµ·åº¦ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’è¡¨ç¤ºã™ã‚‹
 def sim_list(low=30,high=200,sort="DESC"):
 	con = MySQLdb.connect(db="db",
 		host="localhost", user="user", passwd="passwd", charset="utf8")
 	cur = con.cursor()
 	cur.execute('SET NAMES utf8')
 
-	sql = "select id,sim,t_id1,t_id2 from tags_sim \
+	sql = "select id,sim,t_id1,t_id2 from tags_sim Â¥
 		where sim>%d AND sim<%d ORDER BY sim %s limit 100;"
 	cur.execute(sql % (low,high,sort))
 	result = cur.fetchall()
 
 	print "----------------------------------------"
-	print"%3s | %5s | %5s | %15s | %15s" \
+	print"%3s | %5s | %5s | %15s | %15s" Â¥
 			% ("sim", "tag1", "tag2", "tag1_name", "tag2_name")
 	print "----------------------------------------"
 	for sim in result:
@@ -110,7 +110,7 @@ def sim_list(low=30,high=200,sort="DESC"):
 		tag1_name = cur.fetchone()[0]
 		cur.execute(sql % sim[3])
 		tag2_name = cur.fetchone()[0]
-		print "%3d | %5d | %5d | %13s | %13s" \
+		print "%3d | %5d | %5d | %13s | %13s" Â¥
 			% (sim[1], sim[2], sim[3], tag1_name, tag2_name)
 
 	con.commit()
